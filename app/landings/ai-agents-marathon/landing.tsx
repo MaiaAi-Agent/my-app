@@ -76,7 +76,7 @@ export default function AIAgentsMarathonLanding() {
       }
     } catch (error) {
       console.error('Submission error:', error);
-      alert('Помилка при реєстрації. Перевір з'єднання.');
+      alert('Помилка при реєстрації. Перевір з\'єднання.');
     }
   };
 
@@ -281,7 +281,7 @@ export default function AIAgentsMarathonLanding() {
         <div className="inline-block">
           <button
             onClick={() => {
-              document.querySelector('input[type="email"]')?.focus();
+              (document.querySelector('input[type="email"]') as HTMLInputElement)?.focus();
               document.querySelector('input[type="email"]')?.scrollIntoView({ behavior: 'smooth' });
             }}
             className={`px-8 py-4 rounded-lg font-bold text-lg transition-all bg-gradient-to-r ${current.color} hover:shadow-xl hover:shadow-blue-500/50`}
