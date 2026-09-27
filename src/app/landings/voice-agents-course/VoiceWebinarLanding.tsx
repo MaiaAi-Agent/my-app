@@ -2,11 +2,11 @@
 
 import { type FormEvent, useEffect, useState } from "react";
 import {
+  AGENDA,
   AUDIENCE_ORDER,
   AUDIENCES,
   type Audience,
-  FORMAT,
-  PROGRAM,
+  OUTCOMES,
   SOURCE,
   SPEAKERS,
   START,
@@ -19,7 +19,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type Status = "idle" | "sending" | "success" | "error";
 
-export default function VoiceCourseLanding() {
+export default function VoiceWebinarLanding() {
   const [audience, setAudience] = useState<Audience>("freelancers");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
@@ -82,8 +82,9 @@ export default function VoiceCourseLanding() {
             </span>
           </a>
           <nav className={styles.nav} aria-label="Розділи сторінки">
-            <a href="#program">Програма</a>
+            <a href="#agenda">Що буде</a>
             <a href="#speakers">Спікери</a>
+            <a href="#outcomes">Результат</a>
           </nav>
           <a href="#register" className={styles.headerCta}>
             Реєстрація
@@ -98,131 +99,60 @@ export default function VoiceCourseLanding() {
             <div>
               <p className={styles.badge}>
                 <span className={styles.dot} aria-hidden="true" />
-                Voice Agents Course · жива група
+                Прямий ефір · Voice AI агенти
               </p>
               <h1 id="hero-title" className={styles.title}>
-                Навчись створювати надійних{" "}
-                <span className={styles.accent}>Voice AI агентів</span>
+                Voice AI агенти: хайп минув — почалася реальна робота
               </h1>
               <p className={styles.subtitle}>
-                Хайп минув — почалася реальна робота. За 3 дні в живій групі
-                пройдеш шлях від основ до налаштованого голосового агента і
-                розберешся, як монетизувати ці навички.
+                Ефіри з практиками та розробниками AI-агентів Сергієм та
+                Алексом. Бізнес більше не купує «цікаву фічу» — він платить за
+                процеси, економію часу й автоматизацію рутини. Розберемо, як
+                створювати надійних Voice-агентів і монетизувати цю навичку.
               </p>
               <ul className={styles.chips} aria-label="Дата і формат">
                 <li className={styles.chipAccent}>{START.date}</li>
                 <li className={styles.chipAccent}>{START.time}</li>
-                <li className={styles.chip}>3 дні</li>
+                <li className={styles.chip}>3 ефіри</li>
                 <li className={styles.chip}>Live online</li>
               </ul>
+              <p className={styles.heroNote}>
+                Посилання на ефір надішлемо на email після реєстрації
+              </p>
               <a href="#register" className={styles.cta}>
-                Зареєструватися на курс
+                Зареєструватися на ефір
                 <Icon name="arrow" className={styles.btnIcon} />
               </a>
-              <p className={styles.heroNote}>
-                Деталі й доступ надішлемо на email.
-              </p>
             </div>
             <VoiceGraphic className={styles.heroArt} />
           </div>
         </section>
 
-        <section className={styles.section} aria-labelledby="why-title">
-          <div className={styles.container}>
-            <div className={styles.quote}>
-              <p className={styles.quoteLabel}>Висновок живого ефіру</p>
-              <h2 id="why-title" className={styles.quoteTitle}>
-                Бізнес більше не купує «цікаву фічу». Він платить за{" "}
-                <span className={styles.accent}>процеси</span>
-              </h2>
-              <p className={styles.quoteText}>
-                Нещодавно ми провели ефір-дискусію з практиками та розробниками
-                AI-агентів — Сергієм та Алексом. Головне: компанії платять за
-                конкретні процеси, економію часу та автоматизацію рутини. На
-                курсі вчимося будувати саме таких Voice-агентів — надійних, а не
-                демонстраційних.
-              </p>
-            </div>
-          </div>
-        </section>
-
         <section
-          id="audience"
+          id="agenda"
           className={styles.section}
-          aria-labelledby="audience-heading"
+          aria-labelledby="agenda-title"
         >
           <div className={styles.container}>
-            <h2 id="audience-heading" className={styles.h2}>
-              Курс для тебе, якщо ти…
+            <h2 id="agenda-title" className={styles.h2}>
+              Що буде <span className={styles.accent}>на ефірі</span>
             </h2>
-            <fieldset className={styles.toggle}>
-              <legend className={styles.srOnly}>Обери, хто ти</legend>
-              {AUDIENCE_ORDER.map((key) => (
-                <button
-                  key={key}
-                  type="button"
-                  className={styles.toggleBtn}
-                  aria-pressed={audience === key}
-                  onClick={() => setAudience(key)}
-                >
-                  <span className={styles.iconTile}>
-                    <Icon name={AUDIENCES[key].icon} />
-                  </span>
-                  {AUDIENCES[key].formLabel}
-                </button>
-              ))}
-            </fieldset>
-            <div className={styles.audienceCard} aria-live="polite">
-              <h3 className={styles.audienceTitle}>{current.title}</h3>
-              <p className={styles.audienceText}>{current.text}</p>
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.section} aria-labelledby="format-title">
-          <div className={styles.container}>
-            <h2 id="format-title" className={styles.h2}>
-              Формат
-            </h2>
+            <p className={styles.lead}>
+              Три ефіри — від основ до монетизації. Без обіцянок швидкого
+              доходу: тільки те, як це працює на практиці.
+            </p>
             <ul className={styles.grid}>
-              {FORMAT.map((f) => (
-                <li key={f.title} className={styles.card}>
+              {AGENDA.map((a) => (
+                <li key={a.day} className={styles.card}>
                   <span className={styles.iconTile}>
-                    <Icon name={f.icon} />
+                    <Icon name={a.icon} />
                   </span>
-                  <h3 className={styles.cardTitle}>{f.title}</h3>
-                  <p className={styles.cardText}>{f.text}</p>
+                  <p className={styles.dayLabel}>{a.day}</p>
+                  <h3 className={styles.cardTitle}>{a.title}</h3>
+                  <p className={styles.cardText}>{a.text}</p>
                 </li>
               ))}
             </ul>
-          </div>
-        </section>
-
-        <section
-          id="program"
-          className={styles.section}
-          aria-labelledby="program-title"
-        >
-          <div className={styles.container}>
-            <h2 id="program-title" className={styles.h2}>
-              Що буде <span className={styles.accent}>на курсі</span>
-            </h2>
-            <ol className={styles.program}>
-              {PROGRAM.map((d, i) => (
-                <li key={d.day} className={styles.day}>
-                  <span className={styles.dayNum} aria-hidden="true">
-                    0{i + 1}
-                  </span>
-                  <p className={styles.dayLabel}>{d.day}</p>
-                  <h3 className={styles.cardTitle}>{d.title}</h3>
-                  <ul className={styles.topics}>
-                    {d.topics.map((t) => (
-                      <li key={t}>{t}</li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ol>
           </div>
         </section>
 
@@ -233,7 +163,7 @@ export default function VoiceCourseLanding() {
         >
           <div className={styles.container}>
             <h2 id="speakers-title" className={styles.h2}>
-              Спікери
+              Спікери <span className={styles.accent}>ефіру</span>
             </h2>
             <ul className={styles.speakers}>
               {SPEAKERS.map((s) => (
@@ -242,7 +172,7 @@ export default function VoiceCourseLanding() {
                     {s.initial}
                   </span>
                   <div>
-                    <p className={styles.speakerLabel}>Спікер курсу</p>
+                    <p className={styles.speakerLabel}>Спікер ефіру</p>
                     <h3 className={styles.speakerName}>{s.name}</h3>
                     <p className={styles.cardText}>{s.role}</p>
                     <ul className={styles.tags}>
@@ -258,6 +188,58 @@ export default function VoiceCourseLanding() {
         </section>
 
         <section
+          id="outcomes"
+          className={styles.section}
+          aria-labelledby="outcomes-title"
+        >
+          <div className={styles.container}>
+            <h2 id="outcomes-title" className={styles.h2}>
+              Що стане зрозуміло{" "}
+              <span className={styles.accent}>після ефіру</span>
+            </h2>
+            <p className={styles.lead}>
+              Не універсальний рецепт, а послідовність рішень, яку можна
+              приміряти до своєї ситуації.
+            </p>
+            <ol className={styles.steps}>
+              {OUTCOMES.map((o) => (
+                <li key={o.title} className={styles.step}>
+                  <span className={styles.iconTile}>
+                    <Icon name={o.icon} />
+                  </span>
+                  <h3 className={styles.cardTitle}>{o.title}</h3>
+                  <p className={styles.cardText}>{o.text}</p>
+                </li>
+              ))}
+            </ol>
+
+            <h3 className={styles.subhead} id="audience-heading">
+              Кому буде корисно
+            </h3>
+            <fieldset className={styles.toggle}>
+              <legend className={styles.srOnly}>Обери, хто ти</legend>
+              {AUDIENCE_ORDER.map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={styles.toggleBtn}
+                  aria-pressed={audience === key}
+                  onClick={() => setAudience(key)}
+                >
+                  <span className={styles.iconTile}>
+                    <Icon name={AUDIENCES[key].icon} />
+                  </span>
+                  {AUDIENCES[key].title}
+                </button>
+              ))}
+            </fieldset>
+            <div className={styles.audienceCard} aria-live="polite">
+              <p className={styles.audienceText}>{current.text}</p>
+            </div>
+          </div>
+        </section>
+
+        <section
           id="register"
           className={styles.section}
           aria-labelledby="register-title"
@@ -266,11 +248,11 @@ export default function VoiceCourseLanding() {
             <div className={styles.register}>
               <div className={styles.registerIntro}>
                 <h2 id="register-title" className={styles.h2}>
-                  Час для реальної роботи
+                  Зареєструйся на ефір
                 </h2>
                 <p className={styles.cardText}>
-                  Залиш email — надішлемо деталі курсу і доступ до живої групи.
-                  {` ${startLine}.`}
+                  Залиш email — надішлемо посилання на ефір і нагадаємо перед
+                  стартом. {startLine}.
                 </p>
               </div>
 
@@ -339,7 +321,7 @@ export default function VoiceCourseLanding() {
                   >
                     {status === "sending"
                       ? "Надсилаємо…"
-                      : "Зареєструватися на курс"}
+                      : "Зареєструватися на ефір"}
                     <Icon name="arrow" className={styles.btnIcon} />
                   </button>
                   <p className={styles.formNote}>{startLine}</p>
