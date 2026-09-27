@@ -13,9 +13,14 @@
 | `page.tsx` | Серверна сторінка + `metadata` (SEO/OG) |
 | `MarathonLanding.tsx` | Клієнтський компонент: toggle аудиторії, форма, стани |
 | `content.ts` | Весь копірайт: сегменти, переваги, програма. Правити текст — тут |
-| `marathon.module.css` | Стилі (CSS Module, без Tailwind) |
+| `marathon.module.css` | Стилі (CSS Module, без Tailwind). Кольори — токени на початку файлу |
+| `Icon.tsx`, `AgentGraphic.tsx` | Інлайн-SVG іконки та ілюстрація в hero (без зовнішніх бібліотек) |
 | `preview.html` | Статичний знімок сторінки без JS — для швидкого перегляду/погодження |
 | `facebook-creatives.md` | 9 варіантів реклами для FB/IG |
+
+## Дизайн
+
+Стиль узято з наявних сторінок MASC (next.masc.space/ads/ai-agents/vsl-ai-agent-lime-1, webinar-22-09): темний фон `#0a0b0c`, лаймовий акцент `#e4ff3a`, картки з тонкою рамкою і радіусом 16px, заголовки секцій з лаймовою рискою, pill-CTA зі стрілкою, чіпи формату. Шрифти: Manrope (текст) і Unbounded (hero, цифри) через `next/font` у `src/app/layout.tsx`. Кольори сегментів з брифу (blue/purple/green) свідомо замінено одним брендовим акцентом.
 
 ## Змінні середовища (Vercel → Settings → Environment Variables)
 
