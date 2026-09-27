@@ -1,6 +1,6 @@
 # Deploy a MASC landing (Vercel project `maia-ai2/my-app`)
 
-Vercel is connected to this repo: every push to a branch gets a **Preview** deployment (link posted by `vercel[bot]` in the PR), `main` deploys to **Production**.
+Vercel is connected to this repo: every push to a branch gets a **Preview** deployment, `main` deploys to **Production**.
 
 ## Env vars (Vercel → project → Settings → Environment Variables)
 
@@ -17,7 +17,7 @@ Tell the user explicitly:
 ## Testing before merge
 
 - Open the **branch's Preview** row (commit message of the latest push, branch icon), not the Production rows — those show `main`.
-- If Chrome warns «Did you mean claude.ai?» (branch name in hostname), use the deployment's hash URL `my-xxxxxxxx-maia-ai2.vercel.app` from its page, or click Ignore — it's their own team.
+- The working link is the deployment's **hash URL** `my-xxxxxxxxx-maia-ai2.vercel.app` (Deployments → row → Visit). The branch alias from the `vercel[bot]` comment (`my-app-git-<branch>-…`) does not open for the team — never give it out.
 - Submit a test email → expect «Дякуємо! Перевір email» and a new execution in n8n.
 
 ## Launch
