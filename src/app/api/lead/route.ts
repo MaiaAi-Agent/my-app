@@ -1,5 +1,6 @@
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const AUDIENCES = new Set(["switcher", "digital", "business"]);
+// Shared by every landing: each sends its own `source` slug and audience keys.
+const SLUG_RE = /^[a-z0-9_-]{1,40}$/;
 
 // Read at request time. A dynamic lookup keeps Next.js from inlining the
 // NEXT_PUBLIC_ value at build time, so a changed Vercel env var only needs
@@ -26,7 +27,11 @@ export async function POST(request: Request) {
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const audience = typeof body.audience === "string" ? body.audience : "";
   const source = typeof body.source === "string" ? body.source : "";
-  if (!EMAIL_RE.test(email) || !AUDIENCES.has(audience) || !source) {
+  if (
+    !EMAIL_RE.test(email) ||
+    !SLUG_RE.test(audience) ||
+    !SLUG_RE.test(source)
+  ) {
     return Response.json({ error: "invalid" }, { status: 400 });
   }
 
