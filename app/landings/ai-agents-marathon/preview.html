@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-денний марафон AI агентів | MASC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900">
+    <div id="app"></div>
+    
+    <script>
+        // Simple preview (without full React)
+        document.body.innerHTML = `
+            <div class="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
+                <!-- Hero -->
+                <section class="max-w-5xl mx-auto px-4 py-20 text-center">
+                    <div class="mb-8 inline-block bg-blue-500/20 border border-blue-400/30 rounded-full px-4 py-2 text-sm">
+                        ⏰ Марафон розпочинається сьогодні
+                    </div>
+                    
+                    <h1 class="text-5xl font-bold mb-6">
+                        🤖 Перші 3 дні безкоштовно: навчись будувати AI агентів
+                    </h1>
+                    
+                    <p class="text-lg text-slate-300 mb-12 max-w-2xl mx-auto">
+                        За 3 дні марафону ти побудуєш свого першого агента (без коду!) і зрозумієш, як на цьому заробляти від $30/год
+                    </p>
+                    
+                    <!-- Audience selector -->
+                    <div class="grid grid-cols-3 gap-3 mb-12 max-w-2xl mx-auto">
+                        <button class="px-4 py-3 rounded-lg bg-blue-500 border border-blue-400 text-white font-medium">
+                            🌱 Світчер (в IT)
+                        </button>
+                        <button class="px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-slate-300 font-medium">
+                            💼 Digital спец
+                        </button>
+                        <button class="px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-slate-300 font-medium">
+                            🏢 Власник бізнесу
+                        </button>
+                    </div>
+                    
+                    <!-- Form -->
+                    <form class="max-w-md mx-auto mb-16">
+                        <div class="flex gap-2 mb-3">
+                            <input type="email" placeholder="Твоя email адреса" class="flex-1 px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400">
+                            <button type="submit" class="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-400 text-white font-bold">
+                                Реєструйся на марафон
+                            </button>
+                        </div>
+                        <p class="text-xs text-slate-400">
+                            ✅ Безкоштовно. Без спаму. Миттєвий доступ.
+                        </p>
+                    </form>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-4 mb-16 max-w-2xl mx-auto">
+                        <div class="bg-slate-700/30 border border-slate-600/50 rounded-lg p-4">
+                            <div class="font-bold text-lg">4,500+</div>
+                            <div class="text-xs text-slate-400">Учнів</div>
+                        </div>
+                        <div class="bg-slate-700/30 border border-slate-600/50 rounded-lg p-4">
+                            <div class="font-bold text-lg">3</div>
+                            <div class="text-xs text-slate-400">Дні</div>
+                        </div>
+                        <div class="bg-slate-700/30 border border-slate-600/50 rounded-lg p-4">
+                            <div class="font-bold text-lg">$1k+</div>
+                            <div class="text-xs text-slate-400">На перших проєктах</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Benefits -->
+                <section class="bg-slate-800/50 py-16">
+                    <div class="max-w-5xl mx-auto px-4">
+                        <h3 class="text-2xl font-bold text-center mb-12">Що ти отримаєш за 3 дні</h3>
+                        <div class="space-y-4 max-w-2xl mx-auto">
+                            <div class="flex gap-4 p-4 bg-slate-700/20 border border-slate-600/30 rounded-lg">
+                                <span class="text-green-400">✅</span>
+                                <p class="text-slate-200">Зрозумієш, як AI агенти змінюють бізнес</p>
+                            </div>
+                            <div class="flex gap-4 p-4 bg-slate-700/20 border border-slate-600/30 rounded-lg">
+                                <span class="text-green-400">✅</span>
+                                <p class="text-slate-200">Побудуєш свого першого агента (без коду!)</p>
+                            </div>
+                            <div class="flex gap-4 p-4 bg-slate-700/20 border border-slate-600/30 rounded-lg">
+                                <span class="text-green-400">✅</span>
+                                <p class="text-slate-200">Дізнаєшся, як на цьому заробляти від $30/год</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Testimonials -->
+                <section class="max-w-5xl mx-auto px-4 py-16">
+                    <h3 class="text-2xl font-bold text-center mb-12">Що кажуть учні</h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="p-5 bg-slate-700/30 border border-slate-600/30 rounded-lg">
+                            <p class="text-slate-200 mb-4 italic">"За 3 дні розібрався з AI агентами. Тепер біржа повна замовлень."</p>
+                            <p class="font-bold text-sm">Максим, Фрілансер</p>
+                            <p class="text-xs text-slate-400">Світчер з маркетингу</p>
+                        </div>
+                        <div class="p-5 bg-slate-700/30 border border-slate-600/30 rounded-lg">
+                            <p class="text-slate-200 mb-4 italic">"Показав клієнтові, як автоматизувати його sales flow. +$5k/місяць."</p>
+                            <p class="font-bold text-sm">Ольга, Digital Expert</p>
+                            <p class="text-xs text-slate-400">Marketing Specialist</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        `;
+    </script>
+</body>
+</html>
