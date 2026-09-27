@@ -5,7 +5,7 @@ export type Audience =
 
 export const SOURCE = "voice-agents-course";
 
-export const START = { date: "18 жовтня 2026", time: "19:00 (Київ)" };
+export const START = { date: "25 жовтня 2026", time: "19:00 (Київ)" };
 
 export type IconName =
   | "laptop"

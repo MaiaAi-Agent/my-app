@@ -1,16 +1,16 @@
 .page {
-  --bg: #0e0e0f;
-  --surface: #161617;
-  --surface-2: #1c1c1e;
-  --border: #2a2a2c;
-  --border-2: #3a3936;
-  --text: #f5f3ee;
-  --text-2: #b5b1a8;
-  --text-3: #807c74;
-  --accent: #f7a91c;
-  --accent-2: #ffcf3f;
-  --accent-ink: #1a1206;
-  --accent-soft: rgb(247 169 28 / 0.12);
+  --bg: #0a0b0c;
+  --surface: #111415;
+  --surface-2: #161a1b;
+  --border: #252a2c;
+  --border-2: #353b3e;
+  --text: #f4f5f0;
+  --text-2: #b3b8b2;
+  --text-3: #7c827d;
+  --accent: #e4ff3a;
+  --accent-2: #f0ff66;
+  --accent-ink: #0a0b0c;
+  --accent-soft: rgb(228 255 58 / 0.12);
   --error: #ff7a6b;
   --radius: 16px;
   --font-display: var(--font-unbounded), "Arial Black", sans-serif;
