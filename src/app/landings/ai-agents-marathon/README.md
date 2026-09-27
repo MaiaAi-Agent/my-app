@@ -26,37 +26,39 @@
 
 | Змінна | Обов'язкова | Приклад |
 | --- | --- | --- |
-| `NEXT_PUBLIC_WEBHOOK_URL` | так | `https://n8n.mageek.club/webhook/site-lead` |
+| `NEXT_PUBLIC_WEBHOOK_URL` або `WEBHOOK_URL` | так | `https://n8n.mageek.club/webhook/site-lead` |
 | `NEXT_PUBLIC_MARATHON_START` | ні | `13 жовтня` → у формі: «Стартує 13 жовтня. Місця обмежені!» |
 
-Без `NEXT_PUBLIC_WEBHOOK_URL` форма показує помилку «Реєстрація тимчасово недоступна» і пише в консоль. Змінні `NEXT_PUBLIC_*` вшиваються під час збірки — після зміни треба передеплоїти.
+Адреса webhook читається на сервері під час запиту (`src/app/api/lead/route.ts`), тож у браузер не потрапляє. Після зміни у Vercel достатньо Redeploy; змінна має бути ввімкнена для того середовища (Production / Preview), яке тестуєте.
 
-Без `NEXT_PUBLIC_MARATHON_START` під формою: «Місця обмежені! Дату старту надішлемо на email.»
+`NEXT_PUBLIC_MARATHON_START` вшивається під час збірки — після зміни теж Redeploy. Без неї під формою: «Місця обмежені! Дату старту надішлемо на email.»
 
 ## Webhook
 
-`POST` з браузера, `Content-Type: application/json`:
+Браузер шле `POST /api/lead` (той самий домен — CORS налаштовувати не треба), сервер валідує дані й пересилає в n8n:
 
 ```json
 { "email": "name@company.com", "audience": "switcher", "source": "ai-agents-marathon", "timestamp": "2026-09-27T12:00:00.000Z" }
 ```
 
-Успіх — будь-яка 2xx відповідь. Інакше користувач бачить повідомлення про помилку і може повторити.
-
-**CORS:** запит іде напряму з браузера на домен n8n, тому в Webhook-ноді n8n треба дозволити origin лендінгу (Options → Allowed Origins (CORS): `https://<домен-лендінгу>` або `*`). Без цього браузер заблокує запит, і форма покаже помилку.
+| Відповідь `/api/lead` | Що бачить користувач | Причина |
+| --- | --- | --- |
+| 200 | «Дякуємо! Перевір email» | n8n відповів 2xx |
+| 503 `not_configured` | «Реєстрація тимчасово недоступна» | змінна webhook не задана для цього деплою |
+| 502 `upstream` | «Не вдалося надіслати заявку» | n8n недоступний або відповів не 2xx (деталі в Vercel → Logs, префікс `[lead]`) |
+| 400 `invalid` | «Не вдалося надіслати заявку» | невалідні дані |
 
 ## Локально
 
 ```bash
 pnpm install
-NEXT_PUBLIC_WEBHOOK_URL=https://... pnpm dev
+WEBHOOK_URL=https://... pnpm dev
 pnpm lint && pnpm build
 ```
 
 ## Чеклист перед запуском
 
 - [ ] `NEXT_PUBLIC_WEBHOOK_URL` задано у Vercel, тестова заявка видна в логах n8n
-- [ ] CORS у Webhook-ноді n8n налаштовано
 - [ ] Дата старту (`NEXT_PUBLIC_MARATHON_START`) задана
 - [ ] Лист-підтвердження після реєстрації налаштований (сторінка обіцяє «Перевір email»)
 - [ ] Lighthouse 85+ на прод-домені

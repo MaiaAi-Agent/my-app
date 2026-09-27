@@ -13,7 +13,6 @@ import {
 import Icon from "./Icon";
 import styles from "./marathon.module.css";
 
-const WEBHOOK_URL = process.env.NEXT_PUBLIC_WEBHOOK_URL;
 const START_DATE = process.env.NEXT_PUBLIC_MARATHON_START;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -39,27 +38,21 @@ export default function MarathonLanding() {
       setStatus("error");
       return;
     }
-    if (!WEBHOOK_URL) {
-      console.error("NEXT_PUBLIC_WEBHOOK_URL is not set");
-      setError("Реєстрація тимчасово недоступна. Спробуй трохи пізніше.");
-      setStatus("error");
-      return;
-    }
-
     setStatus("sending");
     setError("");
     try {
-      const response = await fetch(WEBHOOK_URL, {
+      const response = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: value,
-          audience,
-          source: SOURCE,
-          timestamp: new Date().toISOString(),
-        }),
+        body: JSON.stringify({ email: value, audience, source: SOURCE }),
       });
-      if (!response.ok) throw new Error(`Webhook responded ${response.status}`);
+      if (response.status === 503) {
+        setError("Реєстрація тимчасово недоступна. Спробуй трохи пізніше.");
+        setStatus("error");
+        return;
+      }
+      if (!response.ok)
+        throw new Error(`/api/lead responded ${response.status}`);
       setStatus("success");
       setEmail("");
     } catch (err) {
