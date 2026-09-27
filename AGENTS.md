@@ -1,3 +1,7 @@
+# Landings
+
+Building or changing a MASC landing page, or deploying one to Vercel: read `docs/AGENT_LANDING_GUIDE.md` first.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
