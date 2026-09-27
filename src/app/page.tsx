@@ -1,1 +1,1 @@
-export { default, metadata } from "./landings/ai-agents-marathon/page";
+export { default, metadata } from "./landings/voice-agents-course/page";

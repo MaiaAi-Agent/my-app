@@ -110,8 +110,8 @@ node .claude/skills/masc-landing/scripts/snapshot.mjs http://localhost:3456/land
 
 Vercel-проєкт `maia-ai2/my-app` підключений до GitHub: **пуш у будь-яку гілку → Preview-деплой**, **мердж у `main` → Production**. Руками нічого деплоїти не треба.
 
-1. Закоміть, запуш гілку, відкрий PR у `main`. `vercel[bot]` додасть коментар з Preview-посиланням, статус «Vercel» має стати success.
-2. Дай користувачу Preview-посилання і попроси відправити тестову заявку (має з'явитися в n8n → Executions).
+1. Закоміть, запуш гілку, відкрий PR у `main`. Статус «Vercel» має стати success.
+2. **Не давай користувачу адресу гілки** з коментаря `vercel[bot]` (`my-app-git-<гілка>-…vercel.app`) — вона не відкривається. Робоче посилання — хеш-адреса деплою `my-xxxxxxxxx-maia-ai2.vercel.app`: Vercel → Deployments → найсвіжіший Preview-рядок гілки → **Visit** (або посилання, яке надіслав користувач). По ньому користувач відправляє тестову заявку (має з'явитися в n8n → Executions).
 3. Після підтвердження змерджи PR (squash) — Production задеплоїться сам.
 
 ### Змінні середовища (Vercel → Settings → Environment Variables)
@@ -135,7 +135,7 @@ Settings → Domains → додати, напр. `webinar.masc.space`, і CNAME 
 | «Реєстрація тимчасово недоступна» | `/api/lead` → 503: у **цьому** деплої немає змінної webhook | Увімкнути змінну для Preview і Production → Redeploy саме цього деплою |
 | «Не вдалося надіслати заявку…» | 502: n8n відхилив або недоступний | Vercel → деплой → Logs, рядок `[lead] …`; перевірити URL і що workflow в n8n активний (`/webhook/…` працює тільки для активного) |
 | Стартова сторінка Next.js «To get started, edit page.tsx» | Відкрили Production-деплой `main` до мерджу | Відкрити Preview-деплой гілки або змерджити PR |
-| Chrome: «Did you mean claude.ai?» | У назві гілки є «claude», вона потрапила в адресу preview | Безпечно (це наш Vercel). Краще — відкрити хеш-адресу `my-xxxx-maia-ai2.vercel.app` зі сторінки деплою. Нові гілки називай `feat/<slug>-landing` |
+| Preview не відкривається / Chrome: «Did you mean claude.ai?» | Дали адресу гілки замість хеш-адреси деплою | Відкрити Vercel → Deployments → Preview-рядок → Visit (`my-xxxxxxxxx-maia-ai2.vercel.app`). Нові гілки називай `feat/<slug>-landing` |
 | Не відкриваються next.masc.space / vercel.app з пісочниці агента | Мережеві обмеження середовища | Попросити скріншоти або дозволити хост у налаштуваннях середовища |
 
 ## 10. Фінальний звіт користувачу

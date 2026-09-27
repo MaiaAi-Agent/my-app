@@ -71,7 +71,7 @@ Kill servers by PID, not `pkill -f <pattern>`: a pattern that appears in your ow
 
 ## 4. Deliver
 
-Commit on the working branch, push, open a PR (Vercel posts a preview link as a bot comment). Then walk the user through `references/deploy.md` — env vars, which deployment to open, domain. Final message: what was built, what deviates from the brief and why, what's assumed, what the user must do before launch.
+Commit on the working branch, push, open a PR. **Never hand the user the branch-alias URL** from the `vercel[bot]` comment (`my-app-git-<branch>-…vercel.app`) — it doesn't open for them. Tell them to open Vercel → Deployments → the newest Preview row for the branch → **Visit**, which gives the working hash URL `my-xxxxxxxxx-maia-ai2.vercel.app`; if they send it back, use that one from then on. Then walk the user through `references/deploy.md` — env vars, which deployment to open, domain. Final message: what was built, what deviates from the brief and why, what's assumed, what the user must do before launch.
 
 ## Troubleshooting (what the user will report)
 
@@ -80,5 +80,5 @@ Commit on the working branch, push, open a PR (Vercel posts a preview link as a 
 | «Реєстрація тимчасово недоступна» | `/api/lead` → 503: env var not in **this** deployment | Enable var for Preview *and* Production, then Redeploy *that* deployment |
 | «Не вдалося надіслати заявку…» | 502: n8n rejected/unreachable | Vercel → deployment → Logs, line `[lead] …`; check URL, n8n workflow active (`/webhook/` needs active, `/webhook-test/` needs "listen") |
 | Next.js starter page «To get started, edit page.tsx» | They opened a Production deploy of `main` before merge | Open the branch's Preview deployment, or merge the PR |
-| Chrome «Did you mean claude.ai?» | Branch name with `claude` is in the preview hostname | Safe (their own Vercel team); or use the hash URL `my-xxxx-<team>.vercel.app` from the deployment page |
+| Preview link doesn't open / Chrome «Did you mean claude.ai?» | You gave the branch-alias URL | Give Vercel → Deployments → newest Preview row → Visit (hash URL `my-xxxxxxxxx-maia-ai2.vercel.app`) instead |
 | Can't reach next.masc.space / vercel.app from the sandbox | Egress policy | Ask for screenshots, or for the host to be allowed in environment network settings |
