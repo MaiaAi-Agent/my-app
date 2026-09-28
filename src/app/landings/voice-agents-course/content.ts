@@ -104,11 +104,34 @@ export const SPEAKERS = [
     name: "Сергій",
     role: "Практик, будує AI-агентів",
     tags: ["AI-агенти", "Практика"],
+    photo: "https://v3b.fal.media/files/b/0aac3943/WenLELzBkZbOVLS1_aQzc_LdpM1hk1.png",
   },
   {
     initial: "А",
     name: "Алекс",
     role: "Розробник AI-агентів",
     tags: ["AI-агенти", "Розробка"],
+    photo: "https://v3b.fal.media/files/b/0aac3944/seURUqi5cepDrOxRGVUNd_gjq6Uv26.png",
+  },
+];
+
+export const HERO_IMAGE = "https://v3b.fal.media/files/b/0aac3943/AlyF98WF5vKRI0IhZI8xI_mq72a3fJ.png";
+
+export const COMMUNITY_PHOTOS = [
+  {
+    src: "https://mageek.club/wp-content/uploads/2024/09/image-4.jpg",
+    alt: "MASC — навчання в спільноті",
+  },
+  {
+    src: "https://mageek.club/wp-content/uploads/2024/09/image-3.jpg",
+    alt: "MASC — практика і результати",
+  },
+  {
+    src: "https://mageek.club/wp-content/uploads/2024/09/image-1-1.jpg",
+    alt: "MASC — живі ефіри та воркшопи",
+  },
+  {
+    src: "https://mageek.club/wp-content/uploads/2024/09/Photo.jpg",
+    alt: "MASC — спільнота автоматизаторів",
   },
 ];

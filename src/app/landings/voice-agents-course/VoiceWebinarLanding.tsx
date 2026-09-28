@@ -1,18 +1,20 @@
 "use client";
 
 import { type FormEvent, useEffect, useState } from "react";
+import Image from "next/image";
 import {
   AGENDA,
   AUDIENCE_ORDER,
   AUDIENCES,
   type Audience,
+  COMMUNITY_PHOTOS,
+  HERO_IMAGE,
   OUTCOMES,
   SOURCE,
   SPEAKERS,
   START,
 } from "./content";
 import Icon from "./Icon";
-import VoiceGraphic from "./VoiceGraphic";
 import styles from "./voice.module.css";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -124,7 +126,17 @@ export default function VoiceWebinarLanding() {
                 <Icon name="arrow" className={styles.btnIcon} />
               </a>
             </div>
-            <VoiceGraphic className={styles.heroArt} />
+            <div className={styles.heroImageWrap}>
+              <Image
+                src={HERO_IMAGE}
+                alt="Voice AI Agents — мікрофон з хвилями та AI-схемами"
+                width={520}
+                height={293}
+                className={styles.heroArt}
+                priority
+                unoptimized
+              />
+            </div>
           </div>
         </section>
 
@@ -168,9 +180,20 @@ export default function VoiceWebinarLanding() {
             <ul className={styles.speakers}>
               {SPEAKERS.map((s) => (
                 <li key={s.name} className={styles.speaker}>
-                  <span className={styles.avatar} aria-hidden="true">
-                    {s.initial}
-                  </span>
+                  {s.photo ? (
+                    <Image
+                      src={s.photo}
+                      alt={s.name}
+                      width={80}
+                      height={80}
+                      className={styles.avatarPhoto}
+                      unoptimized
+                    />
+                  ) : (
+                    <span className={styles.avatar} aria-hidden="true">
+                      {s.initial}
+                    </span>
+                  )}
                   <div>
                     <p className={styles.speakerLabel}>Спікер ефіру</p>
                     <h3 className={styles.speakerName}>{s.name}</h3>
@@ -235,6 +258,31 @@ export default function VoiceWebinarLanding() {
             </fieldset>
             <div className={styles.audienceCard} aria-live="polite">
               <p className={styles.audienceText}>{current.text}</p>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.communitySection} aria-labelledby="community-title">
+          <div className={styles.container}>
+            <h2 id="community-title" className={styles.h2}>
+              MASC — <span className={styles.accent}>спільнота практиків</span>
+            </h2>
+            <p className={styles.lead}>
+              4 500+ випускників. Живі ефіри, розбори кейсів, практичні завдання — без теорії заради теорії.
+            </p>
+            <div className={styles.communityGrid}>
+              {COMMUNITY_PHOTOS.map((photo) => (
+                <div key={photo.src} className={styles.communityPhotoWrap}>
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    width={530}
+                    height={354}
+                    className={styles.communityPhoto}
+                    unoptimized
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </section>
