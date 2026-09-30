@@ -47,7 +47,7 @@ Root route: `src/app/page.tsx` → `export { default, metadata } from "./landing
 
 Hard rules:
 - **No Tailwind classes, no external UI/icon libraries.** CSS Modules + inline SVG.
-- **Form posts to `/api/lead`, never to n8n directly.** Payload `{ email, audience, source }`; the route adds `timestamp`, validates, and forwards to `WEBHOOK_URL` / `NEXT_PUBLIC_WEBHOOK_URL` read at request time. Don't touch the route unless the payload contract changes (then update every landing).
+- **Form posts to `/api/lead`, never to n8n directly.** Payload `{ email, audience, source }` (+ optional `utm` with `utm_source|medium|campaign|content|term` read from the page URL; invalid values are dropped by the route); the route adds `timestamp`, validates, and forwards to `WEBHOOK_URL` / `NEXT_PUBLIC_WEBHOOK_URL` read at request time. Don't touch the route unless the payload contract changes (then update every landing).
 - Never hardcode the webhook URL.
 - Audience toggle and form `<select>` share one state (two-way sync).
 - States: `sending` (button disabled), `success` (`<output>` «Дякуємо! Перевір email», back to form after 5 s), `error` (`role="alert"`). Map 503 → «Реєстрація тимчасово недоступна», anything else → «Не вдалося надіслати заявку…».

@@ -81,8 +81,8 @@ cp -r src/app/landings/ai-agents-marathon src/app/landings/<slug>
 
 ## 6. Форма заявки — контракт (не змінювати)
 
-- Форма шле `POST /api/lead` з `{ email, audience, source }`. **Ніколи не шли напряму в n8n з браузера** і не хардкодь адресу webhook.
-- `src/app/api/lead/route.ts` (спільний для всіх лендінгів) валідує дані, додає `timestamp` і пересилає `{ email, audience, source, timestamp }` на `WEBHOOK_URL` або `NEXT_PUBLIC_WEBHOOK_URL`, які читає **під час запиту**.
+- Форма шле `POST /api/lead` з `{ email, audience, source }` і, за потреби, необов'язковим `utm` (`{ utm_source, utm_medium, utm_campaign, utm_content, utm_term }`, беруться з адреси сторінки; невалідні значення API відкидає, лендінги без `utm` працюють як раніше). **Ніколи не шли напряму в n8n з браузера** і не хардкодь адресу webhook.
+- `src/app/api/lead/route.ts` (спільний для всіх лендінгів) валідує дані, додає `timestamp` і пересилає `{ email, audience, source, utm?, timestamp }` на `WEBHOOK_URL` або `NEXT_PUBLIC_WEBHOOK_URL`, які читає **під час запиту**.
 - Відповіді: 200 → стан успіху; 503 → «Реєстрація тимчасово недоступна» (змінна не задана); 502/400 → «Не вдалося надіслати заявку…».
 - Перемикач аудиторії і `<select>` у формі — один state, синхронізація в обидва боки.
 - Стани: `sending` (кнопка вимкнена) → `success` (`<output>` «Дякуємо! Перевір email», через 5 с знову форма) або `error` (`role="alert"`).
