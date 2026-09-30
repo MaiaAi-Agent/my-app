@@ -115,7 +115,7 @@ export default function AiMarathonLanding({ variant }: { variant: Variant }) {
             <div>
               <p className={styles.badge}>
                 <span className={styles.dot} aria-hidden="true" />
-                Живий онлайн-марафон
+                Живий марафон AI-агентів
               </p>
               <h1 id="hero-title" className={styles.title}>
                 {titleStart}
