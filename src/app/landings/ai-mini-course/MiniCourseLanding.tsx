@@ -12,6 +12,7 @@ import {
   PROGRAM,
   REQUIREMENTS,
   SOURCE,
+  SPEAKER,
 } from "./content";
 import Icon from "./Icon";
 
@@ -211,6 +212,24 @@ export default function MiniCourseLanding() {
                 </li>
               ))}
             </ol>
+          </div>
+        </section>
+
+        <section className={styles.section} aria-labelledby="speaker-title">
+          <div className={styles.container}>
+            <h2 id="speaker-title" className={styles.h2}>
+              Твій <span className={styles.accent}>спікер</span>
+            </h2>
+            <div className={styles.audienceCard}>
+              <h3 className={styles.audienceTitle}>{SPEAKER.name}</h3>
+              <p className={styles.dayLabel}>{SPEAKER.role}</p>
+              <p className={styles.audienceText}>{SPEAKER.text}</p>
+              <ul className={styles.topics}>
+                {SPEAKER.facts.map((f) => (
+                  <li key={f}>{f}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </section>
 
