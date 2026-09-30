@@ -154,7 +154,7 @@ export const TARIFFS = {
     items: [
       { text: "Живі ефіри 13, 14, 15 жовтня", included: true },
       { text: "Запис ефірів", included: false },
-      { text: "2 бонуси-чеклисти", included: false },
+      { text: "2 бонуси", included: false },
     ],
   },
   paid: {
@@ -163,11 +163,11 @@ export const TARIFFS = {
       { text: "Живі ефіри 13, 14, 15 жовтня", included: true },
       { text: "Запис ефірів", included: true },
       {
-        text: "Чеклист «Рутина твоєї ролі, яку можна автоматизувати»",
+        text: "Бонус: мінікурс «Створення персонального AI-помічника»",
         included: true,
       },
       {
-        text: "Чеклист «Як зібрати перший кейс для портфоліо»",
+        text: "Бонус: матеріал «AI для персональної продуктивності»",
         included: true,
       },
     ],
