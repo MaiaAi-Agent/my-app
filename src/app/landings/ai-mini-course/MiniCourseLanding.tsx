@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { type FormEvent, useEffect, useState } from "react";
 import AgentGraphic from "./AgentGraphic";
 import styles from "./ai-mini-course.module.css";
@@ -15,8 +16,27 @@ import {
   SPEAKER,
 } from "./content";
 import Icon from "./Icon";
+import speakerPhoto from "./speaker.jpg";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const UTM_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+] as const;
+
+/** UTM-мітки з адреси сторінки (реклама Meta); порожні не передаємо. */
+function readUtm(): Record<string, string> | undefined {
+  const params = new URLSearchParams(window.location.search);
+  const utm: Record<string, string> = {};
+  for (const key of UTM_KEYS) {
+    const value = params.get(key);
+    if (value) utm[key] = value;
+  }
+  return Object.keys(utm).length ? utm : undefined;
+}
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -52,7 +72,12 @@ export default function MiniCourseLanding() {
       const response = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: value, audience, source: SOURCE }),
+        body: JSON.stringify({
+          email: value,
+          audience,
+          source: SOURCE,
+          utm: readUtm(),
+        }),
       });
       if (response.status === 503) {
         setError("Реєстрація тимчасово недоступна. Спробуй трохи пізніше.");
@@ -220,15 +245,24 @@ export default function MiniCourseLanding() {
             <h2 id="speaker-title" className={styles.h2}>
               Твій <span className={styles.accent}>спікер</span>
             </h2>
-            <div className={styles.audienceCard}>
-              <h3 className={styles.audienceTitle}>{SPEAKER.name}</h3>
-              <p className={styles.dayLabel}>{SPEAKER.role}</p>
-              <p className={styles.audienceText}>{SPEAKER.text}</p>
-              <ul className={styles.topics}>
-                {SPEAKER.facts.map((f) => (
-                  <li key={f}>{f}</li>
-                ))}
-              </ul>
+            <div className={`${styles.audienceCard} ${styles.speaker}`}>
+              <Image
+                src={speakerPhoto}
+                alt={`${SPEAKER.name}, спікер мінікурсу`}
+                className={styles.speakerPhoto}
+                sizes="(min-width: 768px) 280px, 100vw"
+                placeholder="empty"
+              />
+              <div>
+                <h3 className={styles.audienceTitle}>{SPEAKER.name}</h3>
+                <p className={styles.dayLabel}>{SPEAKER.role}</p>
+                <p className={styles.audienceText}>{SPEAKER.text}</p>
+                <ul className={styles.topics}>
+                  {SPEAKER.facts.map((f) => (
+                    <li key={f}>{f}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </section>

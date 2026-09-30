@@ -17,12 +17,12 @@
 
 ## Форма
 
-`POST /api/lead` з `{ email, audience, source }` (контракт спільний для всіх лендінгів, не змінювався). Чекбокс згоди обов'язковий на клієнті, але **не передається в payload**: n8n/SendPulse отримує тільки email, аудиторію і `source`. Запис `marketingOptIn` для студента SendPulse треба виставляти в самому workflow (усе, що прийшло з цього `source`, вже дало згоду).
+`POST /api/lead` з `{ email, audience, source }` і необов'язковим `utm` з адреси сторінки (реклама Meta). Контракт спільний для всіх лендінгів; `utm` необов'язковий, тож інші лендінги не зачеплено. У n8n `utm.*` треба передати у змінні студента/угоду CRM. Чекбокс згоди обов'язковий на клієнті, але **не передається в payload**: n8n/SendPulse отримує тільки email, аудиторію і `source`. Запис `marketingOptIn` для студента SendPulse треба виставляти в самому workflow (усе, що прийшло з цього `source`, вже дало згоду).
 
 Приклад payload у webhook:
 
 ```json
-{ "email": "name@company.com", "audience": "career", "source": "ai-mini-course", "timestamp": "2026-10-01T12:00:00.000Z" }
+{ "email": "name@company.com", "audience": "career", "source": "ai-mini-course", "utm": { "utm_source": "facebook", "utm_medium": "paid", "utm_campaign": "aimini_t1", "utm_content": "b1-1" }, "timestamp": "2026-10-01T12:00:00.000Z" }
 ```
 
 ## Що зробити перед запуском
@@ -30,7 +30,7 @@
 - [ ] У n8n workflow для `source = ai-mini-course`: створити студента в SendPulse Education (курс `ai-agents-mini`, id 50412), виставити `marketingOptIn`, записати `audience`, відкрити доступ, надіслати лист/повідомлення з посиланням на бот `@mini_ai_agent_masc_bot` (deep-link з `source`)
 - [ ] Тестова заявка з Preview-адреси (з'являється в n8n → Executions)
 - [ ] Підтвердити публічний текст «3 дні» (реальний доступ 4 дні: у тексті не вказуємо)
-- [ ] Блок спікера (Ярослав Білий) додати після підтвердження біографії
+- [x] Блок спікера з фото (Ярослав Білий); згода Ярослава на публічне використання фото й біографії `[підтвердити]`
 - [ ] Блок «бонус» додати після узгодження формату розбору
 - [ ] Політика конфіденційності / посилання в футері `[TBD]`
 - [ ] Lighthouse на мобільному > 90
