@@ -58,6 +58,10 @@ try {
     );
 
     await email.fill("test@example.com");
+    await page
+      .locator('form input[type="checkbox"]')
+      .check()
+      .catch(() => {});
     await page.locator('form button[type="submit"]').click();
     const ok = await page
       .locator("output")
