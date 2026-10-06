@@ -1,7 +1,7 @@
 (() => {
   const config = window.MASC_CONFIG || {};
   let destination = null;
-  try { const url = new URL(config.botUrl); if (url.protocol === 'https:') destination = url.href; } catch {}
+  try { const url = new URL(config.botUrl); if (url.protocol === 'https:') destination = window.MASC_UTM?.append ? window.MASC_UTM.append(url.href) : url.href; } catch {}
   const go = document.getElementById('go');
   const notice = document.getElementById('notice');
   const navigate = () => { if (destination) window.location.assign(destination); else { notice.textContent = 'Посилання на бот незабаром з’явиться. Спробуйте перейти трохи пізніше.'; notice.hidden = false; } };

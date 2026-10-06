@@ -3,6 +3,17 @@ const PHONE_RE = /^[+0-9() .\-]{7,25}$/;
 const FORM_SOURCE_RE = /^(page|popup)$/;
 const CAMPAIGN_SOURCE = "masc-ai-business";
 const DEFAULT_AUDIENCE = "business";
+const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "utm_placement", "fbclid"] as const;
+const UTM_RE = /^[^\u0000-\u001F\u007F]{1,200}$/;
+
+function attribution(body: RequestBody) {
+  return Object.fromEntries(
+    UTM_KEYS.flatMap((key) => {
+      const value = body[key];
+      return typeof value === "string" && UTM_RE.test(value.trim()) ? [[key, value.trim()]] : [];
+    }),
+  );
+}
 
 function webhookUrl() {
   const env = process.env;
@@ -14,6 +25,13 @@ type RequestBody = {
   email?: unknown;
   phone?: unknown;
   source?: unknown;
+  utm_source?: unknown;
+  utm_medium?: unknown;
+  utm_campaign?: unknown;
+  utm_content?: unknown;
+  utm_term?: unknown;
+  utm_placement?: unknown;
+  fbclid?: unknown;
 };
 
 export async function POST(request: Request) {
@@ -51,6 +69,7 @@ export async function POST(request: Request) {
         form_type: formType,
         audience: DEFAULT_AUDIENCE,
         timestamp: new Date().toISOString(),
+        ...attribution(body),
       }),
       signal: AbortSignal.timeout(10_000),
     });

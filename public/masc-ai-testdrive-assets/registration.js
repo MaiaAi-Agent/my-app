@@ -31,6 +31,7 @@ document.querySelectorAll('.registration-form').forEach(form => {
     payload.name = payload.name.trim();
     payload.email = payload.email.trim();
     payload.source = form.dataset.source;
+    Object.assign(payload, window.MASC_UTM?.get?.() || {});
     if (!payload.name) { status.textContent = 'Будь ласка, введи своє ім’я.'; return; }
     submit.disabled = true;
     submit.textContent = 'Реєструємо…';
@@ -42,6 +43,9 @@ document.querySelectorAll('.registration-form').forEach(form => {
       form.reset();
       const redirectUrl = result.redirectUrl || 'https://lp.masc.space/masc-ai-thanks.html';
       const target = new URL(redirectUrl, location.href);
+      if (window.MASC_UTM?.get) {
+        for (const [key, value] of Object.entries(window.MASC_UTM.get())) target.searchParams.set(key, value);
+      }
       if (target.protocol === 'https:' || target.origin === location.origin) location.assign(target.href);
     } catch {
       status.textContent = 'Не вдалося надіслати заявку. Спробуй ще раз.';
