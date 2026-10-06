@@ -40,10 +40,9 @@ document.querySelectorAll('.registration-form').forEach(form => {
       if (!result?.success) throw new Error('Registration not accepted');
       status.textContent = 'Ти зареєстрований! До зустрічі на тест-драйві.';
       form.reset();
-      if (result.redirectUrl) {
-        const target = new URL(result.redirectUrl, location.href);
-        if (target.protocol === 'https:' || target.origin === location.origin) location.assign(target.href);
-      }
+      const redirectUrl = result.redirectUrl || 'https://lp.masc.space/masc-ai-thanks.html';
+      const target = new URL(redirectUrl, location.href);
+      if (target.protocol === 'https:' || target.origin === location.origin) location.assign(target.href);
     } catch {
       status.textContent = 'Не вдалося надіслати заявку. Спробуй ще раз.';
     } finally {
