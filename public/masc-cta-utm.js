@@ -6,7 +6,7 @@
    токен `start` — тому мітка доїде тільки якщо кінцевий ресурс сам розбирає ?utm_* (SmartSender
    «Інструменти росту» / deep link із передачею UTM). На самій URL мітки мають бути присутні завжди. */
 (() => {
-  const HOSTS = window.MASC_CTA_HOSTS || ['link.masc.space', 'telegram.me', 't.me'];
+  const HOSTS = window.MASC_CTA_HOSTS || ['link.masc.space'];
 
   const rewrite = () => {
     if (!window.MASC_UTM || typeof window.MASC_UTM.append !== 'function') return;
