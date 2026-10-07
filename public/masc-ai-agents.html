@@ -15,12 +15,12 @@
 <!-- TODO(agent): og:image (1200x630) — власник не надав картинку. Коли буде файл (напр. assets/og-1200x630.jpg):
   <meta property="og:image" content="https://mascaiagents.space/assets/og-1200x630.jpg"> -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2304060F'/%3E%3Cpath d='M32 10l19 11v22L32 54 13 43V21z' fill='%23298DFF'/%3E%3C/svg%3E">
-<!-- TODO(agent): analytics — власник не надав GTM- або Meta Pixel ID, тому НІЧОГО не вставлено.
-  Події вже пушаться у window.dataLayer: view_pricing, select_plan, telegram_click, cta_click, agent_tab, faq_open, form_open, lead_submit.
-  Коли з'являться ID — вставити контейнер GTM і піксель Meta саме тут:
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({"gtm.start":new Date().getTime(),event:"gtm.js"});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://www.googletagmanager.com/gtm.js?id="+i;f.parentNode.insertBefore(j,f);})(window,document,"script","dataLayer","GTM-XXXX");<\/script>
-  <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","PIXEL_ID");fbq("track","PageView");<\/script>
-  Мапінг подій: Meta ViewContent = view_pricing, InitiateCheckout = select_plan, Lead = lead_submit. -->
+<!-- ANALYTICS: Meta Pixel ×3 (ID надані власником 07.10.2026).
+  Події дублюються у window.dataLayer (view_pricing, select_plan, telegram_click, cta_click, agent_tab, faq_open, form_open, lead_submit)
+  і в Meta: PageView на завантаженні, ViewContent = view_pricing, InitiateCheckout = select_plan, Lead = lead_submit.
+  UTM-мітки ловить /masc-utm.js (localStorage) і додає до payload заявки — щоб лід тягнув їх далі у CRM/інший ресурс. -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1011010556726328');fbq('init','5178077478915991');fbq('init','182814964708421');fbq('track','PageView');</script>
+<script src="/masc-utm.js"></script>
 <title>Курс AI-агентів · MASC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
@@ -474,6 +474,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 </style>
 </head>
 <body>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1011010556726328&ev=PageView&noscript=1" alt=""/></noscript><noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=5178077478915991&ev=PageView&noscript=1" alt=""/></noscript><noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=182814964708421&ev=PageView&noscript=1" alt=""/></noscript>
 <!-- COMPONENT: Nav. Sticky, single CTA. Links: #why #build #program #pricing #faq -->
 <header class="nav">
  <div class="wrap">
@@ -977,9 +978,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
  /* checkout hook */
  /* checkout hook: щойно з'явиться URL оплати — він виграє; поки що кнопка тарифу відкриває форму заявки з цим тарифом */
  $$('[data-checkout]').forEach(function(a){var u=CONFIG.CHECKOUT[a.dataset.checkout];if(u){a.href=u;a.target='_blank';a.rel='noopener'}else{a.addEventListener('click',function(e){e.preventDefault();openForm(a.dataset.checkout)})}});
- /* analytics hook: inert until GTM/GA/Pixel is added; pushes to window.dataLayer */
+ /* analytics hook: pushes to window.dataLayer + mirrors key events into Meta Pixel */
  window.dataLayer=window.dataLayer||[];
- function track(ev,p){var o={event:ev};for(var k in (p||{}))o[k]=p[k];window.dataLayer.push(o)}
+ var FB_EVENTS={view_pricing:'ViewContent',select_plan:'InitiateCheckout',lead_submit:'Lead'};
+ function track(ev,p){var o={event:ev};for(var k in (p||{}))o[k]=p[k];window.dataLayer.push(o);
+  if(window.fbq&&FB_EVENTS[ev]){try{fbq('track',FB_EVENTS[ev],{content_name:'ai-agents-course',content_category:'course',plan:(p&&p.plan)||''})}catch(e){}}}
  document.addEventListener('click',function(e){var a=e.target.closest('a,button');if(!a)return;
   if(a.dataset&&a.dataset.checkout){track('select_plan',{plan:a.dataset.checkout})}
   else if(a.hasAttribute('data-tg')){track('telegram_click')}
@@ -990,7 +993,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
  var pr=$('#pricing');if(pr&&'IntersectionObserver' in window){var io=new IntersectionObserver(function(en){if(en[0].isIntersecting){track('view_pricing');io.disconnect()}},{threshold:.25});io.observe(pr)}
 
  /* lead form: tariff buttons open this dialog (see the checkout hook above) */
- function utm(){var o={},p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(function(k){var v=p.get(k);if(v)o[k]=v});return o}
+ function utm(){var o={};try{if(window.MASC_UTM&&window.MASC_UTM.get)o=window.MASC_UTM.get()||{}}catch(e){}
+ var p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','utm_placement','fbclid','gclid'].forEach(function(k){var v=p.get(k);if(v)o[k]=v});return o}
+function cookie(n){var m=document.cookie.match(new RegExp('(^|;\\s*)'+n+'=([^;]*)'));return m?decodeURIComponent(m[2]):''}
+/* Meta matching ids: _fbc/_fbp cookies, _fbc derived from fbclid when the cookie is absent */
+function metaIds(u){try{var fbc=cookie('_fbc'),fbp=cookie('_fbp');if(!fbc&&u.fbclid)fbc='fb.1.'+Date.now()+'.'+u.fbclid;return {fbc:fbc,fbp:fbp}}catch(e){return {fbc:'',fbp:''}}}
  var dlg=$('#leadform'),lf=$('#lf'),lfm=$('#lf-msg'),lfs=$('#lf-submit'),lfp=$('#lf-plan');
  function openForm(p){
   if(!dlg)return;
@@ -1013,7 +1020,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
    if(!$('#lf-consent').checked)return lfe('Потрібна згода з умовами.');
    var plan=lfp?lfp.value:'';
    var body={source:'ai-agents-landing',plan:plan,event_name:'ai-agents-landing-lead',event_id:'aia-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),attribution:plan,name:name,email:mail,phone:tel,page_url:location.href,event_source_url:location.href,referrer:document.referrer,submitted_at:new Date().toISOString()};
-   var u=utm();for(var kk in u){body[kk]=u[kk]}
+   var u=utm();body.utm=u;                                   /* вкладений об'єкт — контракт CRM-пайплайну в n8n */
+   for(var kk in u){if(u[kk])body[kk]=u[kk]}                 /* legacy: пласкі utm_* для наявного webhook */
+   var mi=metaIds(u);if(mi.fbc)body.fbc=mi.fbc;if(mi.fbp)body.fbp=mi.fbp;
    lfs.disabled=true;lfs.textContent='Відправляємо…';lfm.className='lfm';lfm.textContent='';
    fetch(CONFIG.LEAD_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()})
