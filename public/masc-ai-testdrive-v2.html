@@ -120,7 +120,7 @@ body::after{content:"";position:fixed;inset:-50%;z-index:100;pointer-events:none
 .tile .ico{width:22px;height:22px}
 
 /* ============ hero ============ */
-.hero{padding:var(--s6) 0 var(--s8);position:relative}
+.hero{padding:var(--s6) 0 var(--s8);position:relative;overflow-x:clip}
 @media (min-width:1000px){.hero{padding:var(--s10) 0 var(--s12)}}
 .hero-grid{display:grid;gap:var(--s6);align-items:center}
 @media (min-width:1000px){.hero-grid{grid-template-columns:1.08fr 1fr;gap:var(--s8)}}
@@ -144,8 +144,19 @@ body::after{content:"";position:fixed;inset:-50%;z-index:100;pointer-events:none
 .chip-hot .ico{color:var(--accent-ink)}
 .fine{font-size:12px;color:var(--text-3);margin-top:var(--s2)}
 
+/* hero art: персонаж MASC */
+.hero-art{position:relative;aspect-ratio:4/3;overflow:clip;overflow-clip-margin:24px}
+.hero-art img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;
+  mix-blend-mode:lighten;-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 62%,transparent 100%)}
+.art-halo{position:absolute;left:50%;top:44%;width:78%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle,rgba(41,141,255,.28),rgba(41,141,255,.06) 55%,transparent 70%)}
+.art-halo::before,.art-halo::after{content:"";position:absolute;inset:-6%;border-radius:50%;border:1px solid rgba(143,208,255,.18)}
+.art-halo::after{inset:-16%;border-color:rgba(214,35,139,.14);border-style:dashed;animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(1turn)}}
+.js .hero-art img{animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
 /* n8n canvas mockup */
-.mock{position:relative;container-type:inline-size;margin-bottom:170px}
+.mock{position:relative;container-type:inline-size;margin-bottom:60px}
 @media (max-width:520px){.mock{margin-bottom:0}}
 .window{border:1px solid var(--border-strong);border-radius:var(--r-lg);background:var(--surface-1);overflow:hidden;
   box-shadow:0 40px 80px -40px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.02) inset,0 0 80px -30px rgba(77,163,255,.25)}
@@ -182,7 +193,7 @@ body::after{content:"";position:fixed;inset:-50%;z-index:100;pointer-events:none
 .sub-n span{display:grid;place-items:center;width:10cqw;height:10cqw;min-width:34px;min-height:34px;margin:0 auto 1.2cqw;border-radius:50%;border:1px solid var(--border-strong);background:var(--surface-2)}
 .sub-n .brand,.sub-n .ico{width:45%;height:45%}
 .s1{left:29%}.s2{left:43.3%}.s3{left:57.6%}
-.chat-float{position:absolute;right:-3%;bottom:-185px;width:min(62%,280px);padding:12px;border-radius:18px;background:rgba(10,16,34,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+.chat-float{position:absolute;right:0;bottom:-60px;width:min(62%,280px);padding:12px;border-radius:18px;background:rgba(10,16,34,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border:1px solid var(--border-strong);box-shadow:0 30px 60px -20px #000;font-size:13px;line-height:1.4}
 @media (max-width:520px){.chat-float{position:relative;right:auto;bottom:auto;width:100%;margin-top:-12px}}
 .chat-h{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin-bottom:10px}
@@ -472,30 +483,14 @@ h1,h2,h3{overflow-wrap:break-word;hyphens:auto}
       </div>
     </div>
 
-    <figure class="mock rv" style="--i:2" aria-label="Приклад: AI-агент для запису на прийом у конструкторі n8n">
-      <span class="hud hud-tl">workflow / booking-agent</span>
-      <span class="hud hud-tr">● executing</span>
-      <div class="window">
-        <div class="bar"><span class="dots" aria-hidden="true"><b></b><b></b><b></b></span><span class="n8n"><svg class="brand" aria-hidden="true"><use href="#b-n8n"/></svg>n8n</span><span>my-first-agent</span><span class="run"><i></i>Active</span></div>
-        <div class="canvas">
-          <svg class="wires" viewBox="0 0 520 350" preserveAspectRatio="none" aria-hidden="true">
-            <path class="wire" d="M150 128 C165 128 170 128 185 128"/>
-            <path class="wire" d="M340 128 C355 128 360 128 374 128"/>
-            <path class="wire wire-sub" d="M228 172 C228 200 186 205 186 232"/>
-            <path class="wire wire-sub" d="M262 172 L262 232"/>
-            <path class="wire wire-sub" d="M296 172 C296 200 336 205 336 232"/>
-            <path class="flow" d="M150 128 L185 128"/>
-            <path class="flow d2" d="M340 128 L374 128"/>
-          </svg>
-          <div class="node n-trg"><span class="nb"><svg class="brand" style="color:#26A5E4" aria-hidden="true"><use href="#b-Telegram"/></svg></span><span><b>Telegram</b><small>Нове повідомлення</small></span><span class="n-ok"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span></div>
-          <div class="node n-agent"><span class="nb"><svg class="ico" aria-hidden="true"><use href="#i-bot"/></svg></span><span><b>AI Agent</b><small>Записує клієнта</small></span><span class="n-ok"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></span></div>
-          <div class="node n-out"><span class="nb"><svg class="brand" style="color:#26A5E4" aria-hidden="true"><use href="#b-Telegram"/></svg></span><span><b>Відповідь</b><small>Клієнту в чат</small></span></div>
-          <div class="sub-n s1"><span><svg class="ico" aria-hidden="true"><use href="#i-brain"/></svg></span>Chat Model</div>
-          <div class="sub-n s2"><span><svg class="ico" aria-hidden="true"><use href="#i-memory"/></svg></span>Memory</div>
-          <div class="sub-n s3"><span><svg class="brand" style="color:#4285F4" aria-hidden="true"><use href="#b-gcal"/></svg></span>Calendar</div>
-        </div>
+    <figure class="mock rv" style="--i:2" aria-label="AI-агент MASC">
+      <span class="hud hud-tl">masc / ai-agent</span>
+      <span class="hud hud-tr">● online</span>
+      <div class="hero-art">
+        <span class="art-halo" aria-hidden="true"></span>
+        <img src="/masc-ai-testdrive-assets/masc-agent.webp" alt="AI-агент MASC — робот у навушниках і худі MASC" width="1200" height="900" fetchpriority="high" decoding="async">
       </div>
-      <div class="chat-float" id="chat" aria-hidden="true">
+      <div class="chat-float" id="chat" aria-hidden="true" style="z-index:2">
         <div class="chat-h"><span class="av"><svg class="ico"><use href="#i-bot"/></svg></span><span>Агент запису<small>онлайн</small></span></div>
         <div class="msg u seq">Можна записатися на п'ятницю?</div>
         <div class="msg b seq">Так! У п'ятницю вільно:<div class="slots"><span>11:00</span><span>15:30</span></div></div>
