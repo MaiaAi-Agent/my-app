@@ -480,7 +480,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
  <div class="wrap">
   <a class="logo" href="#top">MASC<b> · </b>AI</a>
   <nav class="nav-links"><a href="#build">Що збереш</a><a href="#program">Програма</a><a href="#speaker">Спікер</a><a href="#pricing">Тарифи</a><a href="#faq">Питання</a></nav>
-  <a class="btn sm" href="#pricing">Обрати тариф</a>
+  <a class="btn sm" href="#" data-booking>Забронювати місце</a>
  </div>
 </header>
 
@@ -915,7 +915,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   <span class="eyebrow">Стартуй сьогодні</span>
   <h2>Забери систему, адаптуй її й впровадь</h2>
   <p class="lead">Від 45 €/міс або 7,98 € на день. Перший агент уже на 2-му тижні.</p>
-  <div class="two"><a class="btn" href="#pricing">Обрати тариф і збирати першого агента →</a><a class="btn ghost" href="#" data-tg>Запитати менеджера в Telegram</a></div>
+  <div class="two"><a class="btn" href="#" data-booking>Забронювати місце →</a><a class="btn ghost" href="#" data-tg>Запитати менеджера в Telegram</a></div>
  </div>
 </section>
 
@@ -941,14 +941,15 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
  </form>
 </dialog>
 
-<div class="sticky" id="sticky" hidden><a class="btn block" href="#pricing">Обрати тариф →</a></div>
+<div class="sticky" id="sticky" hidden><a class="btn block" href="#" data-booking>Забронювати місце →</a></div>
 
 <script>
 (function(){
  /* ===== CONFIG: заповнити перед публікацією ===== */
  var CONFIG={
   TG_URL:'https://t.me/mascmanager3',   /* менеджер курсу */
-  CHECKOUT:{start:'',practice:'',mastermind:'',mentorship:''},   /* окремих посилань на оплату курсу немає — кнопки тарифів відкривають форму заявки з передвибраним тарифом */
+  BOOKING_URL:'https://buy.stripe.com/3cI8wOdiq0P06hv3Wm2oF0h',   /* бронь місця на курс */
+  CHECKOUT:{start:'',practice:'',mastermind:'',mentorship:''},   /* окремих посилань на оплату тарифів немає — кнопки тарифів відкривають форму заявки з передвибраним тарифом */
   LEAD_WEBHOOK:'https://n8n.mageek.club/webhook/workshop-order'   /* n8n workflow «Workshop заявки з site mvp» → Google Sheet «workshop заявки» (name/phone/email/utm/page_url).
      Чому не order-ai-ai-agents: перевірено 07.10.2026 — той workflow пише лише ssid(bigint), name, username, utm_* у form_registrations і падає з «invalid input syntax for type bigint: ""» на нашому payload (exec 11164439), тобто email/телефон/тариф він не приймає.
      Для заявок у CRM (Flowlu/prosales) треба інший endpoint: POST https://n8n.mageek.club/webhook/site-lead з ключем form_type/webhook із таблиці crm_rules (напр. consult_ai_agent, order_ai_agent_form_online_lesson). Потрібне підтвердження власника — тестовий POST створює реальну угоду в CRM. */
@@ -973,8 +974,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
  pills.forEach(function(p){p.addEventListener('click',function(){pills.forEach(function(x){x.setAttribute('aria-pressed','false')});p.setAttribute('aria-pressed','true');price=+p.dataset.p;calc()})});
  rng.addEventListener('input',function(){n=+rng.value;calc()});calc();
  /* telegram hook */
- var TG_URL=CONFIG.TG_URL;
+ var TG_URL=CONFIG.TG_URL, BOOKING_URL=CONFIG.BOOKING_URL;
  $$('[data-tg]').forEach(function(a){if(TG_URL){a.href=TG_URL;a.target='_blank';a.rel='noopener'}else{a.addEventListener('click',function(e){e.preventDefault()})}});
+ $$('[data-booking]').forEach(function(a){if(BOOKING_URL){a.href=BOOKING_URL;a.target='_blank';a.rel='noopener'}else{a.href='#pricing'}});
  /* checkout hook */
  /* checkout hook: щойно з'явиться URL оплати — він виграє; поки що кнопка тарифу відкриває форму заявки з цим тарифом */
  $$('[data-checkout]').forEach(function(a){var u=CONFIG.CHECKOUT[a.dataset.checkout];if(u){a.href=u;a.target='_blank';a.rel='noopener'}else{a.addEventListener('click',function(e){e.preventDefault();openForm(a.dataset.checkout)})}});
