@@ -948,7 +948,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
  /* ===== CONFIG: заповнити перед публікацією ===== */
  var CONFIG={
   TG_URL:'https://t.me/mascmanager3',   /* менеджер курсу */
-  BOOKING_URL:'https://buy.stripe.com/3cI8wOdiq0P06hv3Wm2oF0h',   /* бронь місця на курс */
+  BOOKING_URL:'https://buy.stripe.com/3cI8wOdiq0P06hv3Wm2oF0h',   /* універсальне посилання на бронювання — використовується на вебінарах для всіх курсів MASC, не лише AI-агентів */
   CHECKOUT:{start:'',practice:'',mastermind:'',mentorship:''},   /* окремих посилань на оплату тарифів немає — кнопки тарифів відкривають форму заявки з передвибраним тарифом */
   LEAD_WEBHOOK:'https://n8n.mageek.club/webhook/workshop-order'   /* n8n workflow «Workshop заявки з site mvp» → Google Sheet «workshop заявки» (name/phone/email/utm/page_url).
      Чому не order-ai-ai-agents: перевірено 07.10.2026 — той workflow пише лише ssid(bigint), name, username, utm_* у form_registrations і падає з «invalid input syntax for type bigint: ""» на нашому payload (exec 11164439), тобто email/телефон/тариф він не приймає.
