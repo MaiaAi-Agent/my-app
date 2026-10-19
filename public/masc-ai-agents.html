@@ -950,9 +950,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   TG_URL:'https://t.me/mascmanager3',   /* менеджер курсу */
   BOOKING_URL:'https://buy.stripe.com/3cI8wOdiq0P06hv3Wm2oF0h',   /* універсальне посилання на бронювання — використовується на вебінарах для всіх курсів MASC, не лише AI-агентів */
   CHECKOUT:{start:'',practice:'',mastermind:'',mentorship:''},   /* окремих посилань на оплату тарифів немає — кнопки тарифів відкривають форму заявки з передвибраним тарифом */
-  LEAD_WEBHOOK:'https://n8n.mageek.club/webhook/workshop-order'   /* n8n workflow «Workshop заявки з site mvp» → Google Sheet «workshop заявки» (name/phone/email/utm/page_url).
-     Чому не order-ai-ai-agents: перевірено 07.10.2026 — той workflow пише лише ssid(bigint), name, username, utm_* у form_registrations і падає з «invalid input syntax for type bigint: ""» на нашому payload (exec 11164439), тобто email/телефон/тариф він не приймає.
-     Для заявок у CRM (Flowlu/prosales) треба інший endpoint: POST https://n8n.mageek.club/webhook/site-lead з ключем form_type/webhook із таблиці crm_rules (напр. consult_ai_agent, order_ai_agent_form_online_lesson). Потрібне підтвердження власника — тестовий POST створює реальну угоду в CRM. */
+  /* архівна копія заявки в Google Sheet «workshop заявки» (не блокує відправку) */
+  LEAD_WEBHOOK:'https://n8n.mageek.club/webhook/workshop-order',
+  /* ОСНОВНИЙ канал: master-webhook (n8n tiny-titan) → CRM. Контракт від програміста 19.10.2026:
+     масив з одним об'єктом {name, phone, email, fbp, fbc, clientID, form_type, weebhook}, ключ доступу — webhook_key у query. */
+  CRM_WEBHOOK:'https://tiny-titan.masc.space/webhook/master-webhook?webhook_key=site-lead',
+  CRM_FORM_TYPE:'order-ai-agent-main-site'
  };
  /* ===== /CONFIG ===== */
  var $=function(s,r){return (r||document).querySelector(s)},$$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
@@ -998,8 +1001,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
  function utm(){var o={};try{if(window.MASC_UTM&&window.MASC_UTM.get)o=window.MASC_UTM.get()||{}}catch(e){}
  var p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign','utm_content','utm_term','utm_placement','fbclid','gclid'].forEach(function(k){var v=p.get(k);if(v)o[k]=v});return o}
 function cookie(n){var m=document.cookie.match(new RegExp('(^|;\\s*)'+n+'=([^;]*)'));return m?decodeURIComponent(m[2]):''}
-/* Meta matching ids: _fbc/_fbp cookies, _fbc derived from fbclid when the cookie is absent */
-function metaIds(u){try{var fbc=cookie('_fbc'),fbp=cookie('_fbp');if(!fbc&&u.fbclid)fbc='fb.1.'+Date.now()+'.'+u.fbclid;return {fbc:fbc,fbp:fbp}}catch(e){return {fbc:'',fbp:''}}}
+/* Meta matching ids: _fbc/_fbp cookies, _fbc derived from fbclid when the cookie is absent; clientID — GA client id із _ga */
+function metaIds(u){try{var fbc=cookie('_fbc'),fbp=cookie('_fbp'),cid='';var ga=cookie('_ga');if(ga){var m=ga.match(/^GA\d+\.\d+\.(\d+\.\d+)$/);if(m)cid=m[1]}if(!fbc&&u.fbclid)fbc='fb.1.'+Date.now()+'.'+u.fbclid;return {fbc:fbc,fbp:fbp,clientID:cid}}catch(e){return {fbc:'',fbp:'',clientID:''}}}
  var dlg=$('#leadform'),lf=$('#lf'),lfm=$('#lf-msg'),lfs=$('#lf-submit'),lfp=$('#lf-plan');
  function openForm(p){
   if(!dlg)return;
@@ -1025,10 +1028,18 @@ function metaIds(u){try{var fbc=cookie('_fbc'),fbp=cookie('_fbp');if(!fbc&&u.fbc
    var u=utm();body.utm=u;                                   /* вкладений об'єкт — контракт CRM-пайплайну в n8n */
    for(var kk in u){if(u[kk])body[kk]=u[kk]}                 /* legacy: пласкі utm_* для наявного webhook */
    var mi=metaIds(u);if(mi.fbc)body.fbc=mi.fbc;if(mi.fbp)body.fbp=mi.fbp;
+   /* CRM payload — точний контракт master-webhook (n8n tiny-titan): масив з одним об'єктом */
+   var crm=[{name:name,phone:tel,email:mail,fbp:mi.fbp||'',fbc:mi.fbc||'',clientID:mi.clientID||'',
+    form_type:CONFIG.CRM_FORM_TYPE,weebhook:CONFIG.CRM_WEBHOOK,
+    plan:plan,page_url:location.href,submitted_at:body.submitted_at}];
+   for(var kk in u){if(u[kk])crm[0][kk]=u[kk]}
    lfs.disabled=true;lfs.textContent='Відправляємо…';lfm.className='lfm';lfm.textContent='';
-   fetch(CONFIG.LEAD_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+   fetch(CONFIG.CRM_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(crm)})
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()})
-    .then(function(){lfm.className='lfm ok';lfm.textContent='Дякуємо! Заявку отримано — зв’яжемось у робочий час.';track('lead_submit',{plan:plan});lf.reset();clearTimeout(lfTimer);lfTimer=setTimeout(function(){if(dlg.close)dlg.close()},4000)})
+    .then(function(){
+      /* дубль у Google Sheet — фоном, на успіх заявки не впливає */
+      try{fetch(CONFIG.LEAD_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}catch(e){}
+      lfm.className='lfm ok';lfm.textContent='Дякуємо! Заявку отримано — зв’яжемось у робочий час.';track('lead_submit',{plan:plan});lf.reset();clearTimeout(lfTimer);lfTimer=setTimeout(function(){if(dlg.close)dlg.close()},4000)})
     .catch(function(){lfe('Не вдалося відправити. Спробуй ще раз або напиши менеджеру в Telegram.')})
     .then(function(){lfs.disabled=false;lfs.textContent='Відправити заявку →'});
   });
