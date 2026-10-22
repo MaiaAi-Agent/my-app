@@ -11,3 +11,16 @@ div.goal,div.bonus-ticket{cursor:default}
 .problem:hover .doodle-photo{transform:rotate(-5deg) translateY(-4px)}
 @media (max-width:1050px){.doodle-photo{width:160px;height:160px}}
 @media (max-width:760px){.doodle-photo{width:165px;height:165px}}
+
+/* --- larger CTA labels --- */
+.button{font-size:15px;letter-spacing:.2px;padding:21px 26px}
+.nav-cta{font-size:15px}
+.bonus-stage-foot .button,.goal-footer .button,.apply-copy .final-cta{font-size:15px}
+@media (max-width:1050px){
+  .button,.hero .button,.bonus-stage-foot .button,.goal-footer .button,.apply-copy .final-cta{font-size:14px}
+  .nav-cta{font-size:14px}
+}
+@media (max-width:760px){
+  .button,.hero .button,.bonus-stage-foot .button,.goal-footer .button,.apply-copy .final-cta{font-size:15px}
+  .nav-cta{font-size:12px}
+}
