@@ -4,8 +4,8 @@
 :root{--bg:#000}
 body{background:#000}
 .bonus-ticket:before,.bonus-ticket:after{background:#000}
-a.goal,a.bonus-ticket,a.nav-cta,a.button{text-decoration:none}
-a.goal{display:block;cursor:pointer}
+a.nav-cta,a.button{text-decoration:none}
+div.goal,div.bonus-ticket{cursor:default}
 .doodle-photo{width:190px;height:190px;object-fit:contain;display:block;
   filter:drop-shadow(0 14px 14px #3e22111a);transition:transform .4s}
 .problem:hover .doodle-photo{transform:rotate(-5deg) translateY(-4px)}
