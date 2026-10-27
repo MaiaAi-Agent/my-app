@@ -6,6 +6,7 @@ import {
   AUDIENCES,
   type Audience,
   CALL_TOPICS,
+  COMPARE,
   FAQ,
   FLAGMAN_BONUS,
   SOURCE,
@@ -195,6 +196,31 @@ export default function ClubLanding() {
                     {t.cta}
                     <Icon name="arrow" className={styles.btnIcon} />
                   </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section
+          id="compare"
+          className={styles.section}
+          aria-labelledby="compare-title"
+        >
+          <div className={styles.container}>
+            <h2 id="compare-title" className={styles.h2}>
+              Курс чи клуб? <span className={styles.accent}>Разом — найкраще</span>
+            </h2>
+            <ul className={styles.grid}>
+              {COMPARE.map((c) => (
+                <li key={c.title} className={styles.card}>
+                  <h3 className={styles.cardTitle}>{c.title}</h3>
+                  <p className={styles.cardText}>{c.tagline}</p>
+                  <ul className={styles.topics}>
+                    {c.points.map((p) => (
+                      <li key={p}>{p}</li>
+                    ))}
+                  </ul>
                 </li>
               ))}
             </ul>
