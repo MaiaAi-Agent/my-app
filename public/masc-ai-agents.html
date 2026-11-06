@@ -1027,12 +1027,14 @@ function metaIds(u){try{var fbc=cookie('_fbc'),fbp=cookie('_fbp'),cid='';var ga=
    var body={source:'ai-agents-landing',plan:plan,event_name:'ai-agents-landing-lead',event_id:'aia-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),attribution:plan,name:name,email:mail,phone:tel,page_url:location.href,event_source_url:location.href,referrer:document.referrer,submitted_at:new Date().toISOString()};
    var u=utm();body.utm=u;                                   /* вкладений об'єкт — контракт CRM-пайплайну в n8n */
    for(var kk in u){if(u[kk])body[kk]=u[kk]}                 /* legacy: пласкі utm_* для наявного webhook */
+   body.ref_code=new URLSearchParams(location.search).get('ref_code');
    var mi=metaIds(u);if(mi.fbc)body.fbc=mi.fbc;if(mi.fbp)body.fbp=mi.fbp;
    /* CRM payload — точний контракт master-webhook (n8n tiny-titan): масив з одним об'єктом */
    var crm=[{name:name,phone:tel,email:mail,fbp:mi.fbp||'',fbc:mi.fbc||'',clientID:mi.clientID||'',
     form_type:CONFIG.CRM_FORM_TYPE,weebhook:CONFIG.CRM_WEBHOOK,
     plan:plan,page_url:location.href,submitted_at:body.submitted_at}];
    for(var kk in u){if(u[kk])crm[0][kk]=u[kk]}
+   crm[0].ref_code=body.ref_code;
    lfs.disabled=true;lfs.textContent='Відправляємо…';lfm.className='lfm';lfm.textContent='';
    fetch(CONFIG.CRM_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(crm)})
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()})
