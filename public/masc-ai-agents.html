@@ -1031,7 +1031,7 @@ function metaIds(u){try{var fbc=cookie('_fbc'),fbp=cookie('_fbp'),cid='';var ga=
    var mi=metaIds(u);if(mi.fbc)body.fbc=mi.fbc;if(mi.fbp)body.fbp=mi.fbp;
    /* CRM payload — точний контракт master-webhook (n8n tiny-titan): масив з одним об'єктом */
    var crm=[{name:name,phone:tel,email:mail,fbp:mi.fbp||'',fbc:mi.fbc||'',clientID:mi.clientID||'',
-    form_type:CONFIG.CRM_FORM_TYPE,weebhook:CONFIG.CRM_WEBHOOK,
+    form_type:CONFIG.CRM_FORM_TYPE,
     plan:plan,page_url:location.href,submitted_at:body.submitted_at}];
    for(var kk in u){if(u[kk])crm[0][kk]=u[kk]}
    crm[0].ref_code=body.ref_code;
