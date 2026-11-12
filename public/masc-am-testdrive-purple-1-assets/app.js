@@ -57,9 +57,9 @@
 
   function bindCtas() {
     document.querySelectorAll('button.button').forEach((btn) => {
-      btn.addEventListener('click', (event) => {
+      btn.addEventListener('click', async (event) => {
         event.preventDefault();
-        const href = resolveDestination();
+        const href = await resolveDestination();
         if (!href) { openModal(); return; }
         window.location.href = href;
       });
